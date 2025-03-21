@@ -1,5 +1,7 @@
 from flask import Flask,request,render_template
-
+import sqlite3
+import datetime
+flag = 1
 app=Flask(__name__)
 
 @app.route("/",methods=["POST","GET"])
@@ -8,7 +10,16 @@ def index():
 
 @app.route("/main",methods=["POST","GET"])
 def main():
-    user_name = request.form.get("q")
+    if flag==1:
+        user_name = request.form.get("q")
+        t=datetime.datetime.now()
+        conn =sqlite3.connect('user.db')
+        c=conn.cursor()
+        c.execute('INSERT INTO user (name,timestamp) VALUES(?,?)',(user_name,t))
+        conn.commit()
+        c.close()
+        conn.close()
+        flag = 0
     return(render_template("main.html"))
 
 @app.route("/foodexp",methods=["POST","GET"])
@@ -31,6 +42,31 @@ def test_result():
         return(render_template("pass.html"))
     elif answer=="true":
         return(render_template("fail.html"))
+    
+@app.route("/userLog",methods=["POST","GET"])
+def userLog():
+    conn=sqlite3.connect('user.db')
+    c= conn.cursor()
+    c.execute("select *from user")
+    r=""
+    for row in c:
+        r =r+str(row)+"\n"
+    print(r)
+    c.close()
+    conn.close()
+    return(render_template("userLog.html",r=r))
+
+@app.route("/delLog",methods=["POST","GET"])
+def delLog():
+    conn=sqlite3.connect('user.db')
+    c= conn.cursor()
+    c.execute("delete from user")
+    conn.commit()
+    c.close()
+    conn.close()
+    return(render_template("delLog.html"))
+
+
 if __name__=="__main__":
     app.run()
 
