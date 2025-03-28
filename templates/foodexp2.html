@@ -4,10 +4,15 @@
 </head>
 <body>
     <div class="container">
+        <h2>Predict Food Expenditure</h2>
+        <input type="number" id="salary" placeholder="Enter Salary">
+        <button class="btn" onclick="predict_foodexp()">Enter</button>
+        <p id="foodexp"></p>
+
         <form action="/main" method="POST">
             <input type="submit" value="Main">
         </form>
-        <h6>reply: {{r}}</h6>
-        
+
+        <script src="{{url_for('static', filename='foodexp.js')}}"></script>
     </div>   
 </body>
