@@ -5,8 +5,8 @@ import google.generativeai as genai
 import os
 import wikipedia
 
+api = os.getenv("makersuite")
 model = genai.GenerativeModel("gemini-1.5-flash")
-api="AIzaSyAMy8gbF-lF5OZqcfVhxJPGhBKQvQEE3dU"
 genai.configure(api_key=api)
 flag = 1
 
